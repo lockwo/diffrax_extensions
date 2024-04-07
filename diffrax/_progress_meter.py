@@ -94,7 +94,10 @@ class _TextProgressMeterState(eqx.Module):
 
 
 def _print_percent_callback(progress):
-    print(f"{100 * progress.item():.2f}%")
+    if eqx.is_array(progress):
+        # May not be an array when called with `JAX_DISABLE_JIT=1`
+        progress = progress.item()
+    print(f"{100 * progress:.2f}%")
 
 
 def _print_percent(progress):
@@ -103,6 +106,11 @@ def _print_percent(progress):
     progress = eqxi.nonbatchable(progress)  # check we'll only call the callback once.
     jax.debug.callback(_print_percent_callback, progress, ordered=True)
     return progress
+
+
+def _final_print_percent(progress):
+    if progress != 1:
+        print("100.00%")
 
 
 class TextProgressMeter(AbstractProgressMeter):
@@ -152,10 +160,7 @@ class TextProgressMeter(AbstractProgressMeter):
         # As in `step`, we `unvmap` to handle batched state.
         # This means we only call the callback once.
         progress = _unvmap_min(state.progress)
-        # Consumes `progress` without using it, to get the order of callbacks correct.
-        progress = jax.debug.callback(
-            lambda _: print("100.00%"), progress, ordered=True
-        )
+        progress = jax.debug.callback(_final_print_percent, progress, ordered=True)
 
 
 TextProgressMeter.__init__.__doc__ = """**Arguments:**

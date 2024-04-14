@@ -209,6 +209,7 @@ class TqdmProgressMeter(AbstractProgressMeter):
     def _step_bar(bar: "tqdm.tqdm", progress: FloatScalarLike) -> None:  # pyright: ignore  # noqa: F821
         bar.n = round(100 * float(progress), 2)
         bar.update(n=0)
+        bar.refresh()
 
     def step(
         self,
@@ -298,12 +299,14 @@ class _ProgressMeterManager:
     def close(self, close_bar: Callable[[Any], None], idx: IntScalarLike):
         def _close(_idx):
             with self.lock:
-                _idx = np.unique(_idx).item()  # As in `step`.
+                _idx = _idx.item()
                 bar = self.bars[_idx]
                 close_bar(bar)
                 del self.bars[_idx]
 
-        io_callback(_close, None, idx)
+        # Unlike in `step`, we do the `unvmap_max` here. For mysterious reasons this
+        # callback does not trigger at all otherwise.
+        io_callback(_close, None, eqxi.unvmap_max(idx))
 
 
 _progress_meter_manager = _ProgressMeterManager()

@@ -1,12 +1,12 @@
+import re
+
 import diffrax
 import jax
 import jax.numpy as jnp
 import pytest
 
 
-def test_tqdm_progress_meter():
-    # TODO: use a mock to check if tqdm is called with the correct arguments
-
+def test_tqdm_progress_meter(capfd):
     def solve(t0):
         term = diffrax.ODETerm(lambda t, y, args: -0.2 * y)
         solver = diffrax.Dopri5()
@@ -22,14 +22,25 @@ def test_tqdm_progress_meter():
             dt0,
             y0,
             saveat=saveat,
-            progress_meter=diffrax.TqdmProgressMeter(),
+            progress_meter=diffrax.TqdmProgressMeter(refresh_steps=5),
         )
         return sol
 
-    solve(2.0)
-    jax.jit(solve)(2.0)
-    jax.vmap(solve)(jnp.arange(3.0))
-    jax.jit(jax.vmap(solve))(jnp.arange(3.0))
+    solve_fns = [
+        (62, lambda: solve(2.0)),
+        (62, lambda: jax.jit(solve)(2.0)),
+        (102, lambda: jax.vmap(solve)(jnp.arange(3.0))),
+        (102, lambda: jax.jit(jax.vmap(solve))(jnp.arange(3.0))),
+    ]
+    for num_lines, solve_fn in solve_fns:
+        capfd.readouterr()
+        solve_fn()
+        captured = capfd.readouterr()
+        err = captured.err.strip()
+        assert re.match("0.00%|[ ]+|", err.split("\r", 1)[0])
+        assert re.match("100.00%|█+|", err.rsplit("\r", 1)[1])
+        assert captured.err.count("\r") == num_lines
+        assert captured.err.count("\n") == 1
 
 
 def test_text_progress_meter(capfd):

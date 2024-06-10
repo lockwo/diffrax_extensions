@@ -13,7 +13,7 @@ from jaxtyping import ArrayLike, PyTree, PyTreeDef
 
 from ._custom_types import Args, Control, IntScalarLike, RealScalarLike, VF, Y
 from ._misc import upcast_or_raise
-from ._path import AbstractPath
+from ._path import AbstractPathWithDerivative, AbstractPath
 
 
 _VF = TypeVar("_VF", bound=VF)
@@ -98,6 +98,7 @@ class AbstractTerm(eqx.Module, Generic[_VF, _Control], strict=True):
         """
         pass
 
+    @abc.abstractmethod
     def vf_prod(self, t: RealScalarLike, y: Y, args: Args, control: _Control) -> Y:
         r"""The composition of [`diffrax.AbstractTerm.vf`][] and
         [`diffrax.AbstractTerm.prod`][].
@@ -142,8 +143,9 @@ class AbstractTerm(eqx.Module, Generic[_VF, _Control], strict=True):
 
             This function must be linear in `control`.
         """
-        return self.prod(self.vf(t, y, args), control)
+        pass
 
+    @abc.abstractmethod
     def is_vf_expensive(
         self,
         t0: RealScalarLike,
@@ -156,7 +158,7 @@ class AbstractTerm(eqx.Module, Generic[_VF, _Control], strict=True):
 
         Some solvers use this to change their behaviour, so as to act more efficiently.
         """
-        return False
+        pass
 
 
 class ODETerm(AbstractTerm[_VF, RealScalarLike], strict=True):
@@ -213,6 +215,17 @@ class ODETerm(AbstractTerm[_VF, RealScalarLike], strict=True):
 
         return jtu.tree_map(_mul, vf)
 
+    def vf_prod(self, t: RealScalarLike, y: Y, args: Args, control: _Control) -> Y:
+        return self.prod(self.vf(t, y, args), control)
+
+    def is_vf_expensive(
+        self,
+        t0: RealScalarLike,
+        t1: RealScalarLike,
+        y: Y,
+        args: Args,
+    ) -> bool:
+        return False
 
 ODETerm.__init__.__doc__ = """**Arguments:**
 
@@ -223,7 +236,7 @@ ODETerm.__init__.__doc__ = """**Arguments:**
 """
 
 
-class _CallableToPath(AbstractPath[_Control], strict=True):
+class _CallableToPath(AbstractPathWithDerivative[_Control], strict=True):
     fn: Callable
 
     @property
@@ -282,6 +295,18 @@ class _AbstractControlTerm(AbstractTerm[_VF, _Control], strict=True):
         vector_field = _ControlToODE(self)
         return ODETerm(vector_field=vector_field)
 
+    def vf_prod(self, t: RealScalarLike, y: Y, args: Args, control: _Control) -> Y:
+        return self.prod(self.vf(t, y, args), control)
+
+    def is_vf_expensive(
+        self,
+        t0: RealScalarLike,
+        t1: RealScalarLike,
+        y: Y,
+        args: Args,
+    ) -> bool:
+        return False
+
 
 _AbstractControlTerm.__init__.__doc__ = """**Arguments:**
 
@@ -338,7 +363,6 @@ class ControlTerm(_AbstractControlTerm[_VF, _Control], strict=True):
         return jtu.tree_map(_prod, vf, control)
 
 
-
 class WeaklyDiagonalControlTerm(_AbstractControlTerm[_VF, _Control], strict=True):
     r"""A term representing the case of $f(t, y(t), args) \mathrm{d}x(t)$, in
     which the vector field - control interaction is a matrix-vector product, and the
@@ -381,9 +405,7 @@ def _sum(*x):
 _Terms = TypeVar("_Terms", bound=tuple[AbstractTerm, ...])
 
 
-class MultiTerm(
-    AbstractTerm, Generic[_Terms], strict=True
-):
+class MultiTerm(AbstractTerm, Generic[_Terms], strict=True):
     r"""Accumulates multiple terms into a single term.
 
     Consider the SDE
@@ -451,7 +473,6 @@ class MultiTerm(
         return any(term.is_vf_expensive(t0, t1, y, args) for term in self.terms)
 
 
-
 class WrapTerm(AbstractTerm[_VF, _Control], strict=True):
     term: AbstractTerm[_VF, _Control]
     direction: IntScalarLike
@@ -483,7 +504,6 @@ class WrapTerm(AbstractTerm[_VF, _Control], strict=True):
         _t0 = jnp.where(self.direction == 1, t0, -t1)
         _t1 = jnp.where(self.direction == 1, t1, -t0)
         return self.term.is_vf_expensive(_t0, _t1, y, args)
-
 
 
 class AdjointTerm(AbstractTerm[_VF, _Control], strict=True):

@@ -1,6 +1,5 @@
 from typing import Any, Optional
 
-import equinox as eqx
 import jax
 import optimistix as optx
 from jaxtyping import Array, Bool, PyTree, Real, Shaped

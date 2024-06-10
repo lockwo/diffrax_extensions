@@ -10,10 +10,13 @@ from .._custom_types import (
     RealScalarLike,
     SpaceTimeLevyArea,
 )
-from .._path import AbstractPath
+from .._path import AbstractPathWithDerivative
 
 
-class AbstractBrownianPath(AbstractPath[_Control], strict=True):
+_Control = TypeVar("_Control", bound=Union[PyTree[Array], AbstractBrownianIncrement])
+
+
+class AbstractBrownianPath(AbstractPathWithDerivative[_Control], strict=True):
     """Abstract base class for all Brownian paths."""
 
     levy_area: AbstractVar[type[Union[BrownianIncrement, SpaceTimeLevyArea]]]

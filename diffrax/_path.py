@@ -79,6 +79,7 @@ class AbstractPath(eqx.Module, Generic[_Control], strict=True):
         The increment of the path between `t0` and `t1`.
         """
 
+    @abc.abstractmethod
     def derivative(self, t: RealScalarLike, left: bool = True) -> _Control:
         r"""Evaluate the derivative of the path. Essentially equivalent
         to `jax.jvp(self.evaluate, (t,), (jnp.ones_like(t),))` (and indeed this is its
@@ -95,7 +96,15 @@ class AbstractPath(eqx.Module, Generic[_Control], strict=True):
 
         The derivative of the path.
         """
+        pass
+        _, deriv = jax.jvp(
+            lambda _t: self.evaluate(_t, left=left), (t,), (jnp.ones_like(t),)
+        )
+        return deriv
 
+class AbstractPathWithDerivative(AbstractPath, Generic[_Control], strict=True):
+    
+    def derivative(self, t: RealScalarLike, left: bool = True) -> _Control:
         _, deriv = jax.jvp(
             lambda _t: self.evaluate(_t, left=left), (t,), (jnp.ones_like(t),)
         )

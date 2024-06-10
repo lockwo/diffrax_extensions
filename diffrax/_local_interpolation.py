@@ -94,7 +94,7 @@ class ThirdOrderHermitePolynomialInterpolation(AbstractLocalInterpolation, stric
 
 
 class FourthOrderPolynomialInterpolation(
-    AbstractLocalInterpolation, strict=eqx.StrictConfig(allow_abstract_name=True)
+    AbstractLocalInterpolation, strict=True
 ):
     t0: RealScalarLike
     t1: RealScalarLike

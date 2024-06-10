@@ -56,7 +56,7 @@ def update_result(old_result: RESULTS, new_result: RESULTS) -> RESULTS:
     return RESULTS.where(pred, old_result, out_result)
 
 
-class Solution(AbstractPath, strict=eqx.StrictConfig(allow_method_override=True)):
+class Solution(AbstractPath, strict=True):
     """The solution to a differential equation.
 
     **Attributes:**

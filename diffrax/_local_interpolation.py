@@ -1,6 +1,7 @@
 from collections.abc import Callable
 from typing import cast, Optional, TYPE_CHECKING
 
+import equinox as eqx
 import jax
 import jax.numpy as jnp
 import jax.tree_util as jtu
@@ -22,11 +23,11 @@ from ._path import AbstractPath
 ω = cast(Callable, ω)
 
 
-class AbstractLocalInterpolation(AbstractPath):
+class AbstractLocalInterpolation(AbstractPath, strict=True):
     pass
 
 
-class LocalLinearInterpolation(AbstractLocalInterpolation):
+class LocalLinearInterpolation(AbstractLocalInterpolation, strict=True):
     t0: RealScalarLike
     t1: RealScalarLike
     y0: Y
@@ -47,7 +48,7 @@ class LocalLinearInterpolation(AbstractLocalInterpolation):
                 return (coeff * (self.y1**ω - self.y0**ω)).call(jnp.asarray).ω
 
 
-class ThirdOrderHermitePolynomialInterpolation(AbstractLocalInterpolation):
+class ThirdOrderHermitePolynomialInterpolation(AbstractLocalInterpolation, strict=True):
     t0: RealScalarLike
     t1: RealScalarLike
     coeffs: PyTree[Shaped[Array, "4 ?*dims"], "Y"]
@@ -92,7 +93,9 @@ class ThirdOrderHermitePolynomialInterpolation(AbstractLocalInterpolation):
         return jtu.tree_map(_eval, self.coeffs)
 
 
-class FourthOrderPolynomialInterpolation(AbstractLocalInterpolation):
+class FourthOrderPolynomialInterpolation(
+    AbstractLocalInterpolation, strict=True
+):
     t0: RealScalarLike
     t1: RealScalarLike
     coeffs: PyTree[Shaped[Array, "5 ?*y"], "Y"]

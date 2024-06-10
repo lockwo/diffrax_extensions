@@ -63,7 +63,7 @@ _Spline: TypeAlias = Literal["sqrt", "quad", "zero"]
 _BrownianReturn = TypeVar("_BrownianReturn", bound=AbstractBrownianIncrement)
 
 
-class _State(eqx.Module):
+class _State(eqx.Module, strict=True):
     level: IntScalarLike  # level of the tree
     s: RealScalarLike  # starting time of the interval
     w_s_u_su: FloatTriple  # W_s, W_u, W_{s,u}
@@ -134,7 +134,7 @@ def _split_interval(
     return x_s, x_u, x_su
 
 
-class VirtualBrownianTree(AbstractBrownianPath):
+class VirtualBrownianTree(AbstractBrownianPath, strict=True):
     """Brownian simulation that discretises the interval `[t0, t1]` to tolerance `tol`.
 
     !!! info "Levy Area"

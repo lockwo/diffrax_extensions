@@ -34,7 +34,7 @@ def _converged(factor: Scalar, tol: float) -> Bool[Array, ""]:
     return (factor > 0) & (factor < tol)
 
 
-class _VeryChordState(eqx.Module):
+class _VeryChordState(eqx.Module, strict=True):
     linear_state: tuple[lx.AbstractLinearOperator, PyTree[Any]]
     diff: Y
     diffsize: Scalar
@@ -43,7 +43,7 @@ class _VeryChordState(eqx.Module):
     step: Scalar
 
 
-class _NoAux(eqx.Module):
+class _NoAux(eqx.Module, strict=True):
     fn: Callable
 
     def __call__(self, y, args):
@@ -52,7 +52,7 @@ class _NoAux(eqx.Module):
         return out
 
 
-class VeryChord(optx.AbstractRootFinder):
+class VeryChord(optx.AbstractRootFinder, strict=True):
     """The Chord method of root finding.
 
     As `optimistix.Chord`, except that in Runge--Kutta methods, the linearisation point

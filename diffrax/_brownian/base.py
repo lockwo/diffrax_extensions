@@ -13,10 +13,7 @@ from .._custom_types import (
 from .._path import AbstractPath
 
 
-_Control = TypeVar("_Control", bound=Union[PyTree[Array], AbstractBrownianIncrement])
-
-
-class AbstractBrownianPath(AbstractPath[_Control]):
+class AbstractBrownianPath(AbstractPath[_Control], strict=True):
     """Abstract base class for all Brownian paths."""
 
     levy_area: AbstractVar[type[Union[BrownianIncrement, SpaceTimeLevyArea]]]

@@ -17,7 +17,7 @@ from ._custom_types import Control, RealScalarLike
 _Control = TypeVar("_Control", bound=Control)
 
 
-class AbstractPath(eqx.Module, Generic[_Control]):
+class AbstractPath(eqx.Module, Generic[_Control], strict=True):
     """Abstract base class for all paths.
 
     Every path has a start point `t0` and an end point `t1`. In between these values

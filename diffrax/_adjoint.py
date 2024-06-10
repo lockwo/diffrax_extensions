@@ -110,7 +110,7 @@ def _only_transpose_ys(final_state):
     return final_state
 
 
-class AbstractAdjoint(eqx.Module):
+class AbstractAdjoint(eqx.Module, strict=True):
     """Abstract base class for all adjoint methods."""
 
     @abc.abstractmethod
@@ -171,7 +171,7 @@ def _uncallable(*args, **kwargs):
     assert False
 
 
-class RecursiveCheckpointAdjoint(AbstractAdjoint):
+class RecursiveCheckpointAdjoint(AbstractAdjoint, strict=True):
     """Backpropagate through [`diffrax.diffeqsolve`][] by differentiating the numerical
     solution directly. This is sometimes known as "discretise-then-optimise", or
     described as "backpropagation through the solver".
@@ -322,7 +322,7 @@ the computation will not be autodifferentiable.
 """
 
 
-class DirectAdjoint(AbstractAdjoint):
+class DirectAdjoint(AbstractAdjoint, strict=True):
     """A variant of [`diffrax.RecursiveCheckpointAdjoint`][]. The differences are that
     `DirectAdjoint`:
 
@@ -446,7 +446,7 @@ def _frozenset(x: Union[object, Iterable[object]]) -> frozenset[object]:
         return frozenset(iter_x)
 
 
-class ImplicitAdjoint(AbstractAdjoint):
+class ImplicitAdjoint(AbstractAdjoint, strict=True):
     r"""Backpropagate via the [implicit function theorem](https://en.wikipedia.org/wiki/Implicit_function_theorem#Statement_of_the_theorem).
 
     This is used when solving towards a steady state, typically using
@@ -718,7 +718,7 @@ def _loop_backsolve_bwd(
     return a_y1, a_diff_args1, a_diff_terms1
 
 
-class BacksolveAdjoint(AbstractAdjoint):
+class BacksolveAdjoint(AbstractAdjoint, strict=True):
     """Backpropagate through [`diffrax.diffeqsolve`][] by solving the continuous
     adjoint equations backwards-in-time. This is also sometimes known as
     "optimise-then-discretise", the "continuous adjoint method" or simply the "adjoint

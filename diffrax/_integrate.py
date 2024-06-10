@@ -59,14 +59,14 @@ from ._term import AbstractTerm, MultiTerm, ODETerm, WrapTerm
 from ._typing import better_isinstance, get_args_of, get_origin_no_specials
 
 
-class SaveState(eqx.Module):
+class SaveState(eqx.Module, strict=True):
     saveat_ts_index: IntScalarLike
     ts: eqxi.MaybeBuffer[Real[Array, " times"]]
     ys: PyTree[eqxi.MaybeBuffer[Inexact[Array, "times ..."]]]
     save_index: IntScalarLike
 
 
-class State(eqx.Module):
+class State(eqx.Module, strict=True):
     # Evolving state during the solve
     y: PyTree[Array]
     tprev: FloatScalarLike

@@ -13,6 +13,7 @@ from lineax.internal import complex_to_real_dtype
 
 from .._custom_types import (
     AbstractBrownianIncrement,
+    BernoulliIncrement,
     BrownianIncrement,
     levy_tree_transpose,
     RealScalarLike,
@@ -63,7 +64,12 @@ class UnsafeBrownianPath(AbstractBrownianPath):
 
     shape: PyTree[jax.ShapeDtypeStruct] = eqx.field(static=True)
     levy_area: type[
-        Union[BrownianIncrement, SpaceTimeLevyArea, SpaceTimeTimeLevyArea]
+        Union[
+            BrownianIncrement,
+            SpaceTimeLevyArea,
+            SpaceTimeTimeLevyArea,
+            BernoulliIncrement,
+        ]
     ] = eqx.field(static=True)
     key: PRNGKeyArray
 
@@ -72,7 +78,12 @@ class UnsafeBrownianPath(AbstractBrownianPath):
         shape: Union[tuple[int, ...], PyTree[jax.ShapeDtypeStruct]],
         key: PRNGKeyArray,
         levy_area: type[
-            Union[BrownianIncrement, SpaceTimeLevyArea, SpaceTimeTimeLevyArea]
+            Union[
+                BrownianIncrement,
+                SpaceTimeLevyArea,
+                SpaceTimeTimeLevyArea,
+                BernoulliIncrement,
+            ]
         ] = BrownianIncrement,
     ):
         self.shape = (
@@ -142,7 +153,12 @@ class UnsafeBrownianPath(AbstractBrownianPath):
         key,
         shape: jax.ShapeDtypeStruct,
         levy_area: type[
-            Union[BrownianIncrement, SpaceTimeLevyArea, SpaceTimeTimeLevyArea]
+            Union[
+                BrownianIncrement,
+                SpaceTimeLevyArea,
+                SpaceTimeTimeLevyArea,
+                BernoulliIncrement,
+            ]
         ],
         use_levy: bool,
     ):
@@ -167,6 +183,10 @@ class UnsafeBrownianPath(AbstractBrownianPath):
         elif levy_area is BrownianIncrement:
             w = jr.normal(key, shape.shape, shape.dtype) * w_std
             levy_val = BrownianIncrement(dt=dt, W=w)
+        elif levy_area is BernoulliIncrement:
+            w = 2 * jr.bernoulli(key, p=0.5, shape=shape.shape).astype(shape.dtype) - 1
+            w = w * w_std
+            levy_val = BernoulliIncrement(dt=dt, W=w)
         else:
             assert False
 

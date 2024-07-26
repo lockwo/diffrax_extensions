@@ -73,6 +73,11 @@ class BrownianIncrement(AbstractBrownianIncrement):
     W: BM
 
 
+class BernoulliIncrement(AbstractBrownianIncrement):
+    dt: PyTree[FloatScalarLike, "BM"]
+    W: BM
+
+
 class SpaceTimeLevyArea(AbstractSpaceTimeLevyArea):
     dt: PyTree[FloatScalarLike, "BM"]
     W: BM

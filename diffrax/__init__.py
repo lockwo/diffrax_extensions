@@ -17,6 +17,7 @@ from ._custom_types import (
     AbstractBrownianIncrement as AbstractBrownianIncrement,
     AbstractSpaceTimeLevyArea as AbstractSpaceTimeLevyArea,
     AbstractSpaceTimeTimeLevyArea as AbstractSpaceTimeTimeLevyArea,
+    BernoulliIncrement as BernoulliIncrement,
     BrownianIncrement as BrownianIncrement,
     SpaceTimeLevyArea as SpaceTimeLevyArea,
     SpaceTimeTimeLevyArea as SpaceTimeTimeLevyArea,

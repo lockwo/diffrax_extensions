@@ -86,10 +86,6 @@ class StratonovichMilstein(AbstractStratonovichSolver):
 
         _, v0_prod = jax.jvp(_to_jvp, (y0,), (g0_prod,))
         y1 = (y0**ω + f0_prod**ω + g0_prod**ω + 0.5 * v0_prod**ω).ω
-        jax.tree_map(
-            lambda y, f, g, v: y + f + g + 0.5 * v,
-            
-        )
 
         dense_info = dict(y0=y0, y1=y1)
         return y1, None, dense_info, None, RESULTS.successful

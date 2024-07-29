@@ -15,6 +15,7 @@ from lineax.internal import complex_to_real_dtype
 
 from .._custom_types import (
     AbstractBrownianIncrement,
+    BernoulliIncrement,
     BoolScalarLike,
     BrownianIncrement,
     IntScalarLike,
@@ -237,7 +238,12 @@ class VirtualBrownianTree(AbstractBrownianPath):
     tol: RealScalarLike
     shape: PyTree[jax.ShapeDtypeStruct] = eqx.field(static=True)
     levy_area: type[
-        Union[BrownianIncrement, SpaceTimeLevyArea, SpaceTimeTimeLevyArea]
+        Union[
+            BrownianIncrement,
+            SpaceTimeLevyArea,
+            SpaceTimeTimeLevyArea,
+            BernoulliIncrement,
+        ]
     ] = eqx.field(static=True)
     key: PyTree[PRNGKeyArray]
     _spline: _Spline = eqx.field(static=True)
@@ -251,7 +257,12 @@ class VirtualBrownianTree(AbstractBrownianPath):
         shape: Union[tuple[int, ...], PyTree[jax.ShapeDtypeStruct]],
         key: PRNGKeyArray,
         levy_area: type[
-            Union[BrownianIncrement, SpaceTimeLevyArea, SpaceTimeTimeLevyArea]
+            Union[
+                BrownianIncrement,
+                SpaceTimeLevyArea,
+                SpaceTimeTimeLevyArea,
+                BernoulliIncrement,
+            ]
         ] = BrownianIncrement,
         _spline: _Spline = "sqrt",
     ):
@@ -365,7 +376,9 @@ class VirtualBrownianTree(AbstractBrownianPath):
             bhh = (bhh_0, bhh_1, bhh_1)
             bkk = None
 
-        elif self.levy_area is BrownianIncrement:
+        elif (
+            self.levy_area is BrownianIncrement or self.levy_area is BernoulliIncrement
+        ):
             state_key, init_key_w = jr.split(key, 2)
             bhh = None
             bkk = None
@@ -587,6 +600,34 @@ class VirtualBrownianTree(AbstractBrownianPath):
                     bb = jnp.sqrt(sr * ru / su) * z
                 elif self._spline == "quad":
                     z = jr.normal(final_state.key, shape, dtype)
+                    bb = (sr * ru / su) * z
+                elif self._spline == "zero":
+                    bb = jnp.zeros(shape, dtype)
+                else:
+                    assert False
+            w_r = w_mean + bb
+            return _LevyVal(dt=r, W=w_r, H=None, bar_H=None, K=None, bar_K=None)
+
+        elif self.levy_area is BernoulliIncrement:
+            with jax.numpy_dtype_promotion("standard"):
+                w_mean = w_s + sr / su * w_su
+                if self._spline == "sqrt":
+                    z = (
+                        2
+                        * jr.bernoulli(final_state.key, p=0.5, shape=shape).astype(
+                            dtype
+                        )
+                        - 1
+                    )
+                    bb = jnp.sqrt(sr * ru / su) * z
+                elif self._spline == "quad":
+                    z = (
+                        2
+                        * jr.bernoulli(final_state.key, p=0.5, shape=shape).astype(
+                            dtype
+                        )
+                        - 1
+                    )
                     bb = (sr * ru / su) * z
                 elif self._spline == "zero":
                     bb = jnp.zeros(shape, dtype)

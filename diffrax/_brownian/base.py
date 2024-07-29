@@ -6,9 +6,11 @@ from jaxtyping import Array, PyTree
 
 from .._custom_types import (
     AbstractBrownianIncrement,
+    BernoulliIncrement,
     BrownianIncrement,
     RealScalarLike,
     SpaceTimeLevyArea,
+    SpaceTimeTimeLevyArea,
 )
 from .._path import AbstractPath
 
@@ -19,7 +21,16 @@ _Control = TypeVar("_Control", bound=Union[PyTree[Array], AbstractBrownianIncrem
 class AbstractBrownianPath(AbstractPath[_Control]):
     """Abstract base class for all Brownian paths."""
 
-    levy_area: AbstractVar[type[Union[BrownianIncrement, SpaceTimeLevyArea]]]
+    levy_area: AbstractVar[
+        type[
+            Union[
+                BrownianIncrement,
+                SpaceTimeLevyArea,
+                SpaceTimeTimeLevyArea,
+                BernoulliIncrement,
+            ]
+        ]
+    ]
 
     @abc.abstractmethod
     def evaluate(

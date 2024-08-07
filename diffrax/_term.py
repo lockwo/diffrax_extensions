@@ -866,6 +866,16 @@ def _broadcast_pytree(source, target_tree_shape):
 
     return jtu.tree_map(_inner_broadcast, source, target_tree_shape)
 
+class _LangevinArgs2(eqx.Module):
+    gamma: LangevinX
+    u: LangevinX
+    grad_f: Callable[[LangevinX], LangevinX]
+
+    def __hash__(self) -> int:
+        return hash(self.grad_f)
+    
+    def get(self):
+        return (self.gamma, self.u, self.grad_f)
 
 class LangevinTerm(AbstractTerm):
     r"""Used to represent the Langevin SDE, given by:
@@ -882,7 +892,7 @@ class LangevinTerm(AbstractTerm):
     friction and a dampening parameter.
     """
 
-    args: _LangevinArgs = eqx.field(static=True)
+    _args: _LangevinArgs2 = eqx.field(static=True)
     term: MultiTerm[tuple[ODETerm, _LangevinDiffusionTerm]]
 
     def __init__(self, args, bm: AbstractBrownianPath, x0: LangevinX):
@@ -908,10 +918,15 @@ class LangevinTerm(AbstractTerm):
             jtu.tree_map(_shape_check_fun, x0, gamma, u, grad_f_shape)
         ), "The shapes of gamma, u, and grad_f(x0) must be the same as x0."
 
-        self.args = (gamma, u, grad_f)
+        #self.args = (gamma, u, grad_f)
+        self._args = _LangevinArgs2(gamma, u, grad_f)
         drift = ODETerm(lambda t, y, _: _langevin_drift(t, y, self.args))
         diffusion = _LangevinDiffusionTerm(gamma, u, bm)
         self.term = MultiTerm(drift, diffusion)
+
+    @property
+    def args(self):
+        return self._args.get()
 
     def vf(self, t: RealScalarLike, y: LangevinTuple, args: Args) -> tuple[Any, ...]:
         return self.term.vf(t, y, args)

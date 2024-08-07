@@ -162,13 +162,18 @@ def _term_compatible(
                 pass
             elif n_term_args == 2:
                 vf_type_expected, control_type_expected = term_args
-                if not isinstance(term, LangevinTerm):
+                if not isinstance(term, str):
                     # TODO: The line below causes problems with LangevinTerm
                     # Please help me fix this
+                    print(term, yi, args)
+                    print("after")
+                    print(term.vf(0.0, yi, args))
                     vf_type = eqx.filter_eval_shape(term.vf, 0.0, yi, args)
+                    print(vf_type)
                     vf_type_compatible = eqx.filter_eval_shape(
                         better_isinstance, vf_type, vf_type_expected
                     )
+                    print(vf_type_compatible)
                     if not vf_type_compatible:
                         raise ValueError
 
@@ -187,7 +192,8 @@ def _term_compatible(
     try:
         with jax.numpy_dtype_promotion("standard"):
             jtu.tree_map(_check, term_structure, terms, contr_kwargs, y)
-    except ValueError:
+    except ValueError as e:
+        print("ERROR", e)
         # ValueError may also arise from mismatched tree structures
         return False
     return True
@@ -1009,8 +1015,8 @@ def diffeqsolve(
     del timelikes
 
     # Langevin terms must be unwrapped unless `term_structure=LangevinTerm
-    if isinstance(terms, LangevinTerm) and solver.term_structure != LangevinTerm:
-        terms = terms.term
+    # if isinstance(terms, LangevinTerm) and solver.term_structure != LangevinTerm:
+    #     terms = terms.term
 
     # Backward compatibility
     if isinstance(
@@ -1069,6 +1075,7 @@ def diffeqsolve(
     stepsize_controller = stepsize_controller.wrap(direction)
 
     def _wrap(term):
+        print("wrap", type(term))
         assert isinstance(term, AbstractTerm)
         assert not isinstance(term, (MultiTerm, LangevinTerm))
         return WrapTerm(term, direction)

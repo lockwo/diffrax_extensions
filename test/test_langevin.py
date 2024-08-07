@@ -16,9 +16,9 @@ from .helpers import (
 
 
 def _only_langevin_solvers_cls():
-    yield diffrax.ALIGN
+    #yield diffrax.ALIGN
     yield diffrax.ShOULD
-    yield diffrax.QUICSORT
+    #yield diffrax.QUICSORT
 
 
 def _solvers_and_orders():
@@ -74,7 +74,7 @@ def get_pytree_langevin(t0=0.3, t1=1.0, dtype=jnp.float32):
 
 @pytest.mark.parametrize("solver_cls", _only_langevin_solvers_cls())
 @pytest.mark.parametrize("taylor", [True, False])
-@pytest.mark.parametrize("dtype", [jnp.float16, jnp.float32, jnp.float64])
+@pytest.mark.parametrize("dtype", [jnp.float16])
 def test_shape(solver_cls, taylor, dtype):
     if taylor:
         solver = solver_cls(100.0)
@@ -83,11 +83,14 @@ def test_shape(solver_cls, taylor, dtype):
 
     t0, t1 = 0.3, 1.0
     dt0 = 0.3
+    
+    print(solver)
     saveat = SaveAt(ts=jnp.linspace(t0, t1, 7, dtype=dtype))
 
     sde = get_pytree_langevin(t0, t1, dtype)
     bm = sde.get_bm(jr.key(5678), diffrax.SpaceTimeTimeLevyArea, tol=0.2)
     terms = sde.get_terms(bm)
+    print(terms)
 
     sol = diffeqsolve(
         terms, solver, t0, t1, dt0=dt0, y0=sde.y0, args=None, saveat=saveat

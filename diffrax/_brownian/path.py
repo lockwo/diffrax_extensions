@@ -111,7 +111,7 @@ class UnsafeBrownianPath(AbstractBrownianPath):
         t1: Optional[RealScalarLike] = None,
         left: bool = True,
         use_levy: bool = False,
-        k: PRNGKeyArray = None,
+        k: Optional[PRNGKeyArray] = None,
     ) -> Union[PyTree[Array], AbstractBrownianIncrement]:
         del left
         if t1 is None:

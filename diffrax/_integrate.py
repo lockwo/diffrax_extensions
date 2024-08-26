@@ -38,7 +38,7 @@ from ._event import (
     Event,
 )
 from ._global_interpolation import DenseInterpolation
-from ._heuristics import is_sde, is_unsafe_sde
+from ._heuristics import is_sde
 from ._misc import linear_rescale, static_select
 from ._progress_meter import (
     AbstractProgressMeter,

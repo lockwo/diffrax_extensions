@@ -1058,11 +1058,11 @@ def diffeqsolve(
                     "An SDE should not be solved with adaptive step sizes with Euler's "
                     "method, as it may not converge to the correct solution."
                 )
-    if is_unsafe_sde(terms):
-        if isinstance(stepsize_controller, AbstractAdaptiveStepSizeController):
-            raise ValueError(
-                "`UnsafeBrownianPath` cannot be used with adaptive step sizes."
-            )
+    # if is_unsafe_sde(terms):
+    #     if isinstance(stepsize_controller, AbstractAdaptiveStepSizeController):
+    #         raise ValueError(
+    #             "`UnsafeBrownianPath` cannot be used with adaptive step sizes."
+    #         )
 
     # Normalises time: if t0 > t1 then flip things around.
     direction = jnp.where(t0 < t1, 1, -1)

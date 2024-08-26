@@ -111,6 +111,7 @@ class UnsafeBrownianPath(AbstractBrownianPath):
         t1: Optional[RealScalarLike] = None,
         left: bool = True,
         use_levy: bool = False,
+        k: PRNGKeyArray = None,
     ) -> Union[PyTree[Array], AbstractBrownianIncrement]:
         del left
         if t1 is None:
@@ -125,10 +126,13 @@ class UnsafeBrownianPath(AbstractBrownianPath):
         t0 = eqxi.nondifferentiable(t0, name="t0")
         t1 = eqxi.nondifferentiable(t1, name="t1")
         t1 = cast(RealScalarLike, t1)
-        t0_ = force_bitcast_convert_type(t0, jnp.int32)
-        t1_ = force_bitcast_convert_type(t1, jnp.int32)
-        key = jr.fold_in(self.key, t0_)
-        key = jr.fold_in(key, t1_)
+        if k is None:
+            t0_ = force_bitcast_convert_type(t0, jnp.int32)
+            t1_ = force_bitcast_convert_type(t1, jnp.int32)
+            key = jr.fold_in(self.key, t0_)
+            key = jr.fold_in(key, t1_)
+        else:
+            key = k
         key = split_by_tree(key, self.shape)
         out = jtu.tree_map(
             lambda key, shape: self._evaluate_leaf(

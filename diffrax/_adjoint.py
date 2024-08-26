@@ -267,12 +267,12 @@ class RecursiveCheckpointAdjoint(AbstractAdjoint):
         **kwargs,
     ):
         del throw, passed_solver_state, passed_controller_state
-        if is_unsafe_sde(terms):
-            raise ValueError(
-                "`adjoint=RecursiveCheckpointAdjoint()` does not support "
-                "`UnsafeBrownianPath`. Consider using `adjoint=DirectAdjoint()` "
-                "instead."
-            )
+        # if is_unsafe_sde(terms):
+        #     raise ValueError(
+        #         "`adjoint=RecursiveCheckpointAdjoint()` does not support "
+        #         "`UnsafeBrownianPath`. Consider using `adjoint=DirectAdjoint()` "
+        #         "instead."
+        #     )
         if self.checkpoints is None and max_steps is None:
             inner_while_loop = ft.partial(_inner_loop, kind="lax")
             outer_while_loop = ft.partial(_outer_loop, kind="lax")
@@ -349,13 +349,13 @@ class DirectAdjoint(AbstractAdjoint):
         del throw, passed_solver_state, passed_controller_state
         # TODO: remove the `is_unsafe_sde` guard.
         # We need JAX to release bloops, so that we can deprecate `kind="bounded"`.
-        if is_unsafe_sde(terms):
-            kind = "lax"
-            msg = (
-                "Cannot reverse-mode autodifferentiate when using "
-                "`UnsafeBrownianPath`."
-            )
-        elif max_steps is None:
+        # if is_unsafe_sde(terms):
+        #     kind = "lax"
+        #     msg = (
+        #         "Cannot reverse-mode autodifferentiate when using "
+        #         "`UnsafeBrownianPath`."
+        #     )
+        if max_steps is None:
             kind = "lax"
             msg = (
                 "Cannot reverse-mode autodifferentiate when using "

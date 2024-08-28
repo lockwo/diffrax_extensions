@@ -8,7 +8,7 @@ license = {file = "LICENSE"}
 authors = [
   {name = "Owen Lockwood", email = "contact@kidger.site"},
 ]
-keywords = ["jax", "dynamical-systems", "differential-equations", "deep-learning", "equinox", "neural-differential-equations", "diffrax"]
+keywords = ["jax", "dynamical-systems", "differential-equations", "deep-learning", "equinox", "neural-differential-equations", "diffrax_extensions"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",

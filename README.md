@@ -23,3 +23,10 @@ Requires Python 3.9+, JAX 0.4.13+, and [Equinox](https://github.com/patrick-kidg
 ## Documentation
 
 Available at [https://lockwo.github.io/diffrax_extensions](https://lockwo.github.io/diffrax_extensions).
+
+## Why a fork?
+
+Why maintain a fork of Diffrax, as opposed to strictly building on top of it as a dependency? There are several reasons:
+- Features in diffrax_extensions may depend on changes to diffrax core, and we can shorten bottlenecks to deploying features, by rolling out changes in extensions while waiting for the changes to be made to core (rather than waiting for those changes to roll out our features that depend on them)
+- Features will alter code within diffrax. Features will not strictly depend on the primitives diffrax provides, but also modify these primitives.
+- Ease of interoperability. By forking diffrax main, and explicitly supersetting it, we enable diffrax_extensions to be drag and drop in older code bases, and trivial to use the new features of in research code.

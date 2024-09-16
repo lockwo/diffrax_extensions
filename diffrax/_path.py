@@ -4,6 +4,7 @@ from typing import Generic, Optional, TYPE_CHECKING, TypeVar
 import equinox as eqx
 import jax
 import jax.numpy as jnp
+from jaxtyping import PyTree
 
 
 if TYPE_CHECKING:
@@ -11,10 +12,12 @@ if TYPE_CHECKING:
 else:
     from equinox import AbstractVar
 
-from ._custom_types import Control, RealScalarLike
+from ._custom_types import Control, RealScalarLike, Y, Args
+from ._term import AbstractTerm
 
 
 _Control = TypeVar("_Control", bound=Control)
+_PathState = TypeVar("_PathState")
 
 
 class AbstractPath(eqx.Module, Generic[_Control]):
@@ -46,6 +49,24 @@ class AbstractPath(eqx.Module, Generic[_Control]):
 
     t0: AbstractVar[RealScalarLike]
     t1: AbstractVar[RealScalarLike]
+
+    @abc.abstractmethod
+    def init(
+        self,
+        terms: PyTree[AbstractTerm],
+        t0: RealScalarLike,
+        t1: RealScalarLike,
+        y0: Y,
+        args: Args,
+    ) -> _PathState:
+        """Initialises any hidden state for the path.
+
+        **Arguments** as [`diffrax.diffeqsolve`][].
+
+        **Returns:**
+
+        The initial path state, which should be used the first time `evaluate` is called.
+        """
 
     @abc.abstractmethod
     def evaluate(
@@ -100,3 +121,8 @@ class AbstractPath(eqx.Module, Generic[_Control]):
             lambda _t: self.evaluate(_t, left=left), (t,), (jnp.ones_like(t),)
         )
         return deriv
+
+
+class MyControl(AbstractPath):
+    def evaluate(self, t0: RealScalarLike, t1: Optional[RealScalarLike] = None, left: bool = True, control: Optional[_PathState] = None) -> _Control:
+        return 0.0

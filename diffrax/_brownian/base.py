@@ -9,17 +9,38 @@ from .._custom_types import (
     BrownianIncrement,
     RealScalarLike,
     SpaceTimeLevyArea,
+    Y,
+    Args
 )
 from .._path import AbstractPath
+from .._term import AbstractTerm
 
 
 _Control = TypeVar("_Control", bound=Union[PyTree[Array], AbstractBrownianIncrement])
-
+_PathState = TypeVar("_PathState")
 
 class AbstractBrownianPath(AbstractPath[_Control]):
     """Abstract base class for all Brownian paths."""
 
     levy_area: AbstractVar[type[Union[BrownianIncrement, SpaceTimeLevyArea]]]
+
+    @abc.abstractmethod
+    def init(
+        self,
+        terms: PyTree[AbstractTerm],
+        t0: RealScalarLike,
+        t1: RealScalarLike,
+        y0: Y,
+        args: Args,
+    ) -> _PathState:
+        """Initialises any hidden state for the path.
+
+        **Arguments** as [`diffrax.diffeqsolve`][].
+
+        **Returns:**
+
+        The initial path state, which should be used the first time `evaluate` is called.
+        """
 
     @abc.abstractmethod
     def evaluate(
@@ -28,6 +49,7 @@ class AbstractBrownianPath(AbstractPath[_Control]):
         t1: Optional[RealScalarLike] = None,
         left: bool = True,
         use_levy: bool = False,
+        path_state: Optional[_PathState] = None,
     ) -> _Control:
         r"""Samples a Brownian increment $w(t_1) - w(t_0)$.
 
@@ -42,6 +64,7 @@ class AbstractBrownianPath(AbstractPath[_Control]):
             motion has no jump points.)
         - `use_levy`: If True, the return type will be a `LevyVal`, which contains
             PyTrees of Brownian increments and their Lévy areas.
+        - `path_state`: If passed, the current state of the path.
 
         **Returns:**
 

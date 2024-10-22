@@ -784,7 +784,7 @@ def stratonovich_to_ito(drift: ODETerm, diffusion: _AbstractControlTerm) -> ODET
     """Apply a correction to the drift of an SDE to convert it from Stratonovich form
     to Ito form.
 
-    For more information see: https://oatml.cs.ox.ac.uk/blog/2022/03/22/ito-strat.html.
+    For more information see: [https://oatml.cs.ox.ac.uk/blog/2022/03/22/ito-strat.html](https://oatml.cs.ox.ac.uk/blog/2022/03/22/ito-strat.html).
 
     Or (9.16) on page 159 of:
 

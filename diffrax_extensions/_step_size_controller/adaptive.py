@@ -208,8 +208,10 @@ class PIDController(
             ```
             to compare the effect of different tolerances:
             ```python
-            PID_controller_incorrect = diffrax_extensions.PIDController(rtol=1e-3, atol=1e-6)
-            PID_controller_correct = diffrax_extensions.PIDController(rtol=1e-7, atol=1e-9)
+            PID_controller_incorrect = diffrax_extensions.PIDController(rtol=1e-3,
+                atol=1e-6)
+            PID_controller_correct = diffrax_extensions.PIDController(rtol=1e-7,
+                atol=1e-9)
             Constant_controller = diffrax_extensions.ConstantStepSize()
             ```
             The phase portraits of the pendulum from the different tolerances clearly

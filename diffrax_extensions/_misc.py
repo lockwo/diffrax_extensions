@@ -92,8 +92,10 @@ def adjoint_rms_seminorm(x: tuple[PyTree, PyTree, PyTree, PyTree]) -> RealScalar
     as follows:
 
     ```python
-    adjoint_controller = diffrax_extensions.PIDController(norm=diffrax_extensions.adjoint_rms_seminorm)
-    adjoint = diffrax_extensions.BacksolveAdjoint(stepsize_controller=adjoint_controller)
+    adjoint_controller = diffrax_extensions.PIDController(
+        norm=diffrax_extensions.adjoint_rms_seminorm)
+    adjoint = diffrax_extensions.BacksolveAdjoint(
+        stepsize_controller=adjoint_controller)
     diffrax_extensions.diffeqsolve(..., adjoint=adjoint)
     ```
 

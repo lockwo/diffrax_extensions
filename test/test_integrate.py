@@ -566,7 +566,8 @@ def test_static(capfd):
         )
         text, _ = capfd.readouterr()
         assert (
-            text == "static_made_jump=False static_result=diffrax._solution.RESULTS<>\n"
+            text == "static_made_jump=False "
+            "static_result=diffrax_extensions._solution.RESULTS<>\n"
         )
 
         diffrax.diffeqsolve(

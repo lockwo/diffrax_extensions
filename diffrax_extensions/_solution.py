@@ -30,9 +30,10 @@ class RESULTS(optx.RESULTS):  # pyright: ignore
 @property
 def discrete_terminating_event_occurred(self):
     warnings.warn(
-        "`diffrax_extensions.RESULTS.discrete_terminating_event_occurred` is deprecated in "
-        "favour of `diffrax_extensions.RESULTS.terminating_event_occurred`. This will be "
-        "removed in some future version of diffrax_extensions.",
+        "`diffrax_extensions.RESULTS.discrete_terminating_event_occurred` "
+        "is deprecated in "
+        "favour of `diffrax_extensions.RESULTS.terminating_event_occurred`. "
+        "This will be removed in some future version of diffrax_extensions.",
         stacklevel=2,
     )
     return self.event_occurred
@@ -83,9 +84,9 @@ class Solution(AbstractPath):
     - `ys`: The value of the solution at each of the times in `ts`. Might `None` if no
         values were saved.
     - `stats`: Statistics for the solve (number of steps etc.).
-    - `result`: A [`diffrax_extensions.RESULTS`][] specifying the success or cause of failure of
-        the solve. A human-readable message is displayed if printed. No message means
-        success!
+    - `result`: A [`diffrax_extensions.RESULTS`][] specifying the success or cause of
+        failure of the solve. A human-readable message is displayed if printed.
+        No message means success!
     - `solver_state`: If saved, the final internal state of the numerical solver.
     - `controller_state`: If saved, the final internal state for the step size
         controller.

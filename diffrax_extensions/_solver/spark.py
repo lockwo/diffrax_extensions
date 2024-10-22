@@ -40,15 +40,17 @@ class SPaRK(AbstractSRK, AbstractStratonovichSolver):
     It uses three evaluations of the drift and diffusion per step, and has the following
     strong orders of convergence:
 
-    - 1.5 for SDEs with additive noise (but [`diffrax_extensions.ShARK`][] is recommended instead)
+    - 1.5 for SDEs with additive noise (but [`diffrax_extensions.ShARK`][] is
+        recommended instead)
     - 1.0 for Stratonovich SDEs with commutative noise
     ([`diffrax_extensions.SlowRK`][] is recommended instead)
     - 0.5 for Stratonovich SDEs with general noise.
 
     For general Stratonovich SDEs this is equally precise as three steps of
-    [`diffrax_extensions.Heun`][] or a single step of [`diffrax_extensions.GeneralShARK`][]. Unlike those,
-    this method has an embedded error estimate, so it is the recommended choice for
-    adaptive time-stepping. Otherwise, [`diffrax_extensions.GeneralShARK`][] is more efficient.
+    [`diffrax_extensions.Heun`][] or a single step of
+    [`diffrax_extensions.GeneralShARK`][]. Unlike those, this method has an embedded
+    error estimate, so it is the recommended choice for adaptive time-stepping.
+    Otherwise, [`diffrax_extensions.GeneralShARK`][] is more efficient.
 
     ??? cite "Reference"
 

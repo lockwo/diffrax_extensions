@@ -45,8 +45,8 @@ def citation(*args, **kwargs):
     **Arguments:**
 
     `citation` may be called with any subset of the argments to
-    [`diffrax_extensions.diffeqsolve`][]. To generate the citation list it may be easiest
-    to simply replace `diffeqsolve` with `citation`.
+    [`diffrax_extensions.diffeqsolve`][]. To generate the citation list it may be
+    easiest to simply replace `diffeqsolve` with `citation`.
 
     **Returns:**
 
@@ -174,8 +174,8 @@ def _parse_reference_multi(obj) -> list[str]:
 def _no_tracer(x, name):
     if isinstance(x, jax.core.Tracer):
         raise RuntimeError(
-            f"`diffrax_extensions.citation` was called with {name} as a traced JAX value. Try "
-            "running again without this, e.g. using `jax.disable_jit()`."
+            f"`diffrax_extensions.citation` was called with {name} as a traced "
+            "JAX value. Try running again without this, e.g. using `jax.disable_jit()`."
         )
 
 

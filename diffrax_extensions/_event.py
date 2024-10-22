@@ -112,8 +112,8 @@ def steady_state_event(
         msg = (
             "The `rtol`, `atol`, and `norm` for `steady_state_event` default to the "
             "values used with an adaptive step size controller (such as "
-            "`diffrax_extensions.PIDController`). Either use an adaptive step size controller, or "
-            "specify these tolerances manually."
+            "`diffrax_extensions.PIDController`). Either use an adaptive step "
+            "size controller, or specify these tolerances manually."
         )
         if rtol is None:
             if isinstance(stepsize_controller, AbstractAdaptiveStepSizeController):

@@ -48,8 +48,10 @@ class UnsafeBrownianPath(AbstractBrownianPath):
 
     !!! info "Lévy Area"
 
-        Can be initialised with `levy_area` set to `diffrax_extensions.BrownianIncrement`, or
-        `diffrax_extensions.SpaceTimeLevyArea`. If `levy_area=diffrax_extensions.SpaceTimeLevyArea`, then it
+        Can be initialised with `levy_area` set to
+        `diffrax_extensions.BrownianIncrement`, or
+        `diffrax_extensions.SpaceTimeLevyArea`. If
+        `levy_area=diffrax_extensions.SpaceTimeLevyArea`, then it
         also computes space-time Lévy area `H`. This is an additional source of
         randomness required for certain stochastic Runge--Kutta solvers; see
         [`diffrax_extensions.AbstractSRK`][] for more information.

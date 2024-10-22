@@ -123,7 +123,7 @@ class AbstractStepSizeController(eqx.Module, Generic[_ControllerState, _Dt0]):
             hidden state; in particular the FSAL property of some Runge--Kutta
             methods.)
         - The value of the step size controller state at `t1`.
-        - An integer (corresponding to `diffrax_extensions.RESULTS`) indicating whether the step
-            happened successfully, or if it failed for some reason. (e.g. hitting a
-            minimum allowed step size in the solver.)
+        - An integer (corresponding to `diffrax_extensions.RESULTS`) indicating
+            whether the step happened successfully, or if it failed for some reason.
+            (e.g. hitting a minimum allowed step size in the solver.)
         """

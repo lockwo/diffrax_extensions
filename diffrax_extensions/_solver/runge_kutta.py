@@ -198,8 +198,8 @@ automatically.
 
 
 class MultiButcherTableau(eqx.Module):
-    """Wraps multiple [`diffrax_extensions.ButcherTableau`][]s together. Used in some multi-tableau
-    solvers, like IMEX methods.
+    """Wraps multiple [`diffrax_extensions.ButcherTableau`][]s together. Used in some
+    multi-tableau solvers, like IMEX methods.
 
     !!! important
 
@@ -352,8 +352,8 @@ class AbstractRungeKutta(AbstractAdaptiveSolver[_SolverState]):
     [`diffrax_extensions.AbstractESDIRK`][] directly.
 
     Subclasses should specify two class-level attributes. The first is `tableau`, an
-    instance of [`diffrax_extensions.ButcherTableau`][]. The second is `calculate_jacobian`, an
-    instance of [`diffrax_extensions.CalculateJacobian`][].
+    instance of [`diffrax_extensions.ButcherTableau`][]. The second is
+    `calculate_jacobian`, an instance of [`diffrax_extensions.CalculateJacobian`][].
     """
 
     scan_kind: Union[None, Literal["lax", "checkpointed", "bounded"]] = None
@@ -466,9 +466,9 @@ class AbstractRungeKutta(AbstractAdaptiveSolver[_SolverState]):
         # Several of these are implicit methods. The latter two are multi-tableau
         # methods.
         #
-        # Both ODEs and SDEs: this is the usual innovation with diffrax_extensions. We treat
-        # everything as a CDE against an arbitrary control. This also means we have a
-        # distinction between f-space (vector field values) and k-space
+        # Both ODEs and SDEs: this is the usual innovation with diffrax_extensions.
+        # We treat everything as a CDE against an arbitrary control. This also means
+        # we have a distinction between f-space (vector field values) and k-space
         # ((vector field)-control products).
         #
         # Implicit methods: these all involve computing a Jacobian somewhere, and doing

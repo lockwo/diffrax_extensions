@@ -179,8 +179,8 @@ class AbstractSolver(eqx.Module, Generic[_SolverState], **_set_metaclass):
             routine to calculate dense output. (Used with `SaveAt(ts=...)` or
             `SaveAt(dense=...)`.)
         - The value of the solver state at `t1`.
-        - An integer (corresponding to `diffrax_extensions.RESULTS`) indicating whether the step
-            happened successfully, or if (unusually) it failed for some reason.
+        - An integer (corresponding to `diffrax_extensions.RESULTS`) indicating whether
+            the step happened successfully, or if (unusually) it failed for some reason.
         """
 
     @abc.abstractmethod

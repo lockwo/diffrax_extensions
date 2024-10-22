@@ -43,7 +43,8 @@ class AbstractTerm(eqx.Module, Generic[_VF, _Control]):
 
         - `t`: the integration time.
         - `y`: the evolving state; a PyTree of structure $T$.
-        - `args`: any static arguments as passed to [`diffrax_extensions.diffeqsolve`][].
+        - `args`: any static arguments as passed to
+            [`diffrax_extensions.diffeqsolve`][].
 
         **Returns:**
 
@@ -133,7 +134,8 @@ class AbstractTerm(eqx.Module, Generic[_VF, _Control]):
 
         - `t`: the integration time.
         - `y`: the evolving state; a PyTree of structure $T$.
-        - `args`: any static arguments as passed to [`diffrax_extensions.diffeqsolve`][].
+        - `args`: any static arguments as passed to
+            [`diffrax_extensions.diffeqsolve`][].
         - `control`: The control evaluated over an interval; a PyTree of structure $U$.
 
         **Returns:**
@@ -301,9 +303,9 @@ _AbstractControlTerm.__init__.__doc__ = """**Arguments:**
 
 - `control`: The control. Should either be
 
-    1. a [`diffrax_extensions.AbstractPath`][], in which case its `.evaluate(t0, t1)` method
-        will be used to give the increment of the control over a time interval
-        `[t0, t1]`, or
+    1. a [`diffrax_extensions.AbstractPath`][], in which case its 
+        `.evaluate(t0, t1)` method will be used to give the increment of the 
+        control over a time interval `[t0, t1]`, or
     2. a callable `(t0, t1) -> increment`, which returns the increment directly.
 """
 

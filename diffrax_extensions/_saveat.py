@@ -114,13 +114,13 @@ These arguments are used less frequently.
     evolving solution is saved. For example this can be useful to save only statistics
     of your solution, so as to reduce memory usage.
 
-- `subs`: Some PyTree of [`diffrax_extensions.SubSaveAt`][], which allows for finer-grained control
-    over what is saved. Each `SubSaveAt` specifies a combination of a function `fn` and
-    some times `t0`, `t1`, `ts`, `steps` at which to evaluate it. `sol.ts` and `sol.ys`
-    will then be PyTrees of the same structure as `subs`, with each leaf of the PyTree
-    saving what the corresponding `SubSaveAt` specifies. The arguments
-    `SaveAt(t0=..., t1=..., ts=..., steps=..., fn=...)` are actually just a convenience
-    for passing a single `SubSaveAt` as
+- `subs`: Some PyTree of [`diffrax_extensions.SubSaveAt`][], which allows for 
+    finer-grained control over what is saved. Each `SubSaveAt` specifies a combination 
+    of a function `fn` and some times `t0`, `t1`, `ts`, `steps` at which to evaluate 
+    it. `sol.ts` and `sol.ys` will then be PyTrees of the same structure as `subs`, 
+    with each leaf of the PyTree saving what the corresponding `SubSaveAt` specifies. 
+    The arguments `SaveAt(t0=..., t1=..., ts=..., steps=..., fn=...)` are actually 
+    just a convenience for passing a single `SubSaveAt` as
     `SaveAt(subs=SubSaveAt(t0=..., t1=..., ts=..., steps=..., fn=...))`. This
     functionality can be useful when you need different functions of the output saved
     at different times; see the examples below.

@@ -172,9 +172,9 @@ def _uncallable(*args, **kwargs):
 
 
 class RecursiveCheckpointAdjoint(AbstractAdjoint):
-    """Backpropagate through [`diffrax_extensions.diffeqsolve`][] by differentiating the numerical
-    solution directly. This is sometimes known as "discretise-then-optimise", or
-    described as "backpropagation through the solver".
+    """Backpropagate through [`diffrax_extensions.diffeqsolve`][] by differentiating
+    the numerical solution directly. This is sometimes known as
+    "discretise-then-optimise", or described as "backpropagation through the solver".
 
     Uses a binomial checkpointing scheme to keep memory usage low.
 
@@ -184,7 +184,8 @@ class RecursiveCheckpointAdjoint(AbstractAdjoint):
     !!! info
 
         Note that this cannot be forward-mode autodifferentiated. (E.g. using
-        `jax.jvp`.) Try using [`diffrax_extensions.DirectAdjoint`][] if that is something you need.
+        `jax.jvp`.) Try using [`diffrax_extensions.DirectAdjoint`][]
+        if that is something you need.
 
     ??? cite "References"
 
@@ -323,8 +324,8 @@ the computation will not be autodifferentiable.
 
 
 class DirectAdjoint(AbstractAdjoint):
-    """A variant of [`diffrax_extensions.RecursiveCheckpointAdjoint`][]. The differences are that
-    `DirectAdjoint`:
+    """A variant of [`diffrax_extensions.RecursiveCheckpointAdjoint`][].
+    The differences are that `DirectAdjoint`:
 
     - Is less time+memory efficient at reverse-mode autodifferentiation (specifically,
       these will increase every time `max_steps` increases passes a power of 16);
@@ -754,8 +755,8 @@ class BacksolveAdjoint(AbstractAdjoint):
         """
         **Arguments:**
 
-        - `**kwargs`: The arguments for the [`diffrax_extensions.diffeqsolve`][] operations that
-            are called on the backward pass. For example use
+        - `**kwargs`: The arguments for the [`diffrax_extensions.diffeqsolve`][]
+            operations that are called on the backward pass. For example use
             ```python
             BacksolveAdjoint(solver=Dopri5())
             ```
@@ -827,8 +828,8 @@ class BacksolveAdjoint(AbstractAdjoint):
                 )
         if jtu.tree_structure(solver.term_structure) != jtu.tree_structure(0):
             raise NotImplementedError(
-                "`diffrax_extensions.BacksolveAdjoint` is only compatible with solvers that take "
-                "a single term."
+                "`diffrax_extensions.BacksolveAdjoint` is only compatible "
+                "with solvers that take a single term."
             )
         if event is not None:
             raise NotImplementedError(

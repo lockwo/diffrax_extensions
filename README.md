@@ -15,7 +15,9 @@ The following is required per the Apache 2.0 license. The original copyright not
 ## Installation
 
 ```
-pip install diffrax_extensions
+git clone https://github.com/lockwo/diffrax_extensions.git
+cd diffrax_extensions/
+pip install .
 ```
 
 Requires Python 3.9+, JAX 0.4.13+, and [Equinox](https://github.com/patrick-kidger/equinox) 0.10.11+.

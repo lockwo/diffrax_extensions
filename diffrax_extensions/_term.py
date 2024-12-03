@@ -818,6 +818,8 @@ def stratonovich_to_ito(drift: ODETerm, diffusion: _AbstractControlTerm) -> ODET
         return jtu.tree_map(lambda a, b: a - 0.5 * b, _drift, vjp_fn(diff)[0])
 
     return ODETerm(corrected_drift)
+
+
 # The Underdamped Langevin SDE trajectory consists of two components: the position
 # `x` and the velocity `v`. Both of these have the same shape.
 # So, by UnderdampedLangevinX we denote the shape of the x component, and by

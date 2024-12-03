@@ -1,16 +1,9 @@
 from typing import Literal
 
 import diffrax_extensions as diffrax
-import jax
 import jax.numpy as jnp
 import jax.random as jr
 import pytest
-from diffrax_extensions import (
-    ControlTerm,
-    MultiTerm,
-    ODETerm,
-    WeaklyDiagonalControlTerm,
-)
 
 from .helpers import (
     get_mlp_sde,

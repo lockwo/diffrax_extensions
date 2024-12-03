@@ -18,7 +18,7 @@ from diffrax_extensions import (
     UnderdampedLangevinDriftTerm,
     VirtualBrownianTree,
 )
-from diffrax._misc import is_tuple_of_ints
+from diffrax_extensions._misc import is_tuple_of_ints
 from jax import Array
 from jaxtyping import PRNGKeyArray, PyTree, Shaped
 

@@ -1,10 +1,10 @@
-import diffrax
+import diffrax_extensions as diffrax
 import jax
 import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
 import pytest
-from diffrax import diffeqsolve, SaveAt
+from diffrax_extensions import diffeqsolve, SaveAt
 
 from .helpers import (
     get_bqp,

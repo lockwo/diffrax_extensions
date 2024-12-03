@@ -97,3 +97,7 @@ In addition [`diffrax_extensions.AbstractSolver`][] has several subclasses that 
     selection:
         members:
             - __init__
+
+::: diffrax.AbstractFosterLangevinSRK
+    selection:
+        members: false

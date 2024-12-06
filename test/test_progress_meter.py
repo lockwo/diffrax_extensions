@@ -1,6 +1,6 @@
 import re
 
-import diffrax
+import diffrax_extensions as diffrax
 import jax
 import jax.numpy as jnp
 import pytest
@@ -35,6 +35,7 @@ def test_tqdm_progress_meter(capfd):
     for num_lines, solve_fn in solve_fns:
         capfd.readouterr()
         solve_fn()
+        jax.effects_barrier()
         captured = capfd.readouterr()
         err = captured.err.strip()
         assert re.match("0.00%|[ ]+|", err.split("\r", 1)[0])

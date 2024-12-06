@@ -3,7 +3,7 @@ import math
 import operator
 from typing import Any, cast
 
-import diffrax
+import diffrax_extensions as diffrax
 import equinox as eqx
 import jax
 import jax.numpy as jnp
@@ -12,7 +12,7 @@ import jax.tree_util as jtu
 import lineax as lx
 import pytest
 import scipy.stats
-from diffrax import ControlTerm, MultiTerm, ODETerm
+from diffrax_extensions import ControlTerm, MultiTerm, ODETerm
 from equinox.internal import ω
 from jaxtyping import Array, ArrayLike, Float
 
@@ -316,6 +316,8 @@ def test_sde_strong_order(solver_ctr, noise, theoretical_order, dtype):
         get_dt_and_controller,
         diffrax.SaveAt(t1=True),
         bm_tol=2.0 ** -(ref_level + 2),
+        levy_area=None,
+        ref_solution=None,
     )
     assert -0.2 < order - theoretical_order < 0.2
 
@@ -566,7 +568,8 @@ def test_static(capfd):
         )
         text, _ = capfd.readouterr()
         assert (
-            text == "static_made_jump=False static_result=diffrax._solution.RESULTS<>\n"
+            text == "static_made_jump=False "
+            "static_result=diffrax_extensions._solution.RESULTS<>\n"
         )
 
         diffrax.diffeqsolve(

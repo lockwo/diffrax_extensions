@@ -139,17 +139,17 @@ cannot be used for any other SDEs. They only accept special terms as described i
 [Underdamped Langevin terms](../terms.md#underdamped-langevin-terms) section. 
 For an example of their usage, see the [Underdamped Langevin example](../../examples/underdamped_langevin_example.ipynb).
 
-::: diffrax.ALIGN
+::: diffrax_extensions.ALIGN
     selection:
         members:
             - __init__
 
-::: diffrax.ShOULD
+::: diffrax_extensions.ShOULD
     selection:
         members:
             - __init__
 
-::: diffrax.QUICSORT
+::: diffrax_extensions.QUICSORT
     selection:
         members:
             - __init__

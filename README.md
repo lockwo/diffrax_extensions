@@ -1,14 +1,15 @@
 <h1 align='center'>Diffrax Extensions</h1>
 <h2 align='center'>(Extensions to) Diffrax: Numerical differential equation solvers in JAX. Autodifferentiable and GPU-capable.</h2>
 
-Diffrax Extensions is a strict superset of [Diffrax](https://github.com/patrick-kidger/diffrax). Everything in diffrax is included in diffrax extensions (that is to say, any code you have `import diffrax` in, you can replace with `import diffrax_extensions as diffrax` and it will work). However, diffrax extensions (as the name implies) contains features beyond that of diffrax. These currently include:
+Diffrax Extensions is a strict superset of [Diffrax](https://github.com/patrick-kidger/diffrax). Everything in diffrax is included in diffrax extensions (that is to say, any code you have `import diffrax` in, you can replace with `import diffrax_extensions as diffrax` and it will work). However, diffrax extensions (as the name implies) contains features beyond that of diffrax. The current feature list includes:
 
-- Additional SDE tooling
+- Additional SDE tooling:
+    - Converting Stratonovich to Ito SDEs
 
 and will include:
 
 - Additional solvers
-- Additional levy area approximation
+- Additional levy area approximations
 
 The following is required per the Apache 2.0 license. The original copyright notice of diffrax is available here: https://github.com/patrick-kidger/diffrax/blob/main/LICENSE#L189. A copy of the license is available in the `DIFFRAX_LICENSE` file. The significant changes made to the code that we are republishing with are available above. Diffrax does not contain a NOTICE file.
 

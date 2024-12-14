@@ -116,8 +116,8 @@ class AbstractFosterLangevinSRK(
     $\gamma , u \in \mathbb{R}^{d \times d}$ are diagonal matrices governing
     the friction and the damping of the system.
 
-    Solvers which inherit from this class include [`diffrax.ALIGN`][],
-    [`diffrax.ShOULD`][], and [`diffrax.QUICSORT`][].
+    Solvers which inherit from this class include [`diffrax_extensions.ALIGN`][],
+    [`diffrax_extensions.ShOULD`][], and [`diffrax_extensions.QUICSORT`][].
     """
 
     term_structure = MultiTerm[

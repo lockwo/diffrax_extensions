@@ -151,14 +151,14 @@ the friction and the damping of the system.
 These terms enable the use of ULD-specific solvers which can be found 
 [here](./solvers/sde_solvers.md#underdamped-langevin-solvers). Note that these ULD solvers will only work if given
 terms with structure `MultiTerm(UnderdampedLangevinDriftTerm(gamma, u, grad_f), UnderdampedLangevinDiffusionTerm(gamma, u, bm))`,
-where `bm` is an [`diffrax.AbstractBrownianPath`][] and the same values of `gammma` and `u` are passed to both terms.
+where `bm` is an [`diffrax_extensions.AbstractBrownianPath`][] and the same values of `gammma` and `u` are passed to both terms.
 
-::: diffrax.UnderdampedLangevinDriftTerm
+::: diffrax_extensions.UnderdampedLangevinDriftTerm
     selection:
         members:
             - __init__
 
-::: diffrax.UnderdampedLangevinDiffusionTerm
+::: diffrax_extensions.UnderdampedLangevinDiffusionTerm
     selection:
         members:
             - __init__

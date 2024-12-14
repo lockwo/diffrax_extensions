@@ -123,7 +123,7 @@ class TextProgressMeter(AbstractProgressMeter):
         if eqx.is_array(progress):
             # May not be an array when called with `JAX_DISABLE_JIT=1`
             progress = cast(Union[Array, np.ndarray], progress)
-            progress = progress.item()
+            progress = progress.item()  # pyright: ignore
         progress = cast(float, progress)
         bar[0] = progress
         print(f"{100 * progress:.2f}%")

@@ -1,14 +1,14 @@
 import dataclasses
 from typing import Callable, Optional, Union
 
-import diffrax
+import diffrax_extensions as diffrax
 import equinox as eqx
 import jax
 import jax.numpy as jnp
 import jax.random as jr
 import jax.tree_util as jtu
 import optimistix as optx
-from diffrax import (
+from diffrax_extensions import (
     AbstractBrownianPath,
     AbstractTerm,
     ControlTerm,
@@ -18,7 +18,7 @@ from diffrax import (
     UnderdampedLangevinDriftTerm,
     VirtualBrownianTree,
 )
-from diffrax._misc import is_tuple_of_ints
+from diffrax_extensions._misc import is_tuple_of_ints
 from jax import Array
 from jaxtyping import PRNGKeyArray, PyTree, Shaped
 

@@ -129,10 +129,11 @@ from ._term import (
     ControlTerm as ControlTerm,
     MultiTerm as MultiTerm,
     ODETerm as ODETerm,
+    stratonovich_to_ito as stratonovich_to_ito,
     UnderdampedLangevinDiffusionTerm as UnderdampedLangevinDiffusionTerm,
     UnderdampedLangevinDriftTerm as UnderdampedLangevinDriftTerm,
     WeaklyDiagonalControlTerm as WeaklyDiagonalControlTerm,
 )
 
 
-__version__ = importlib.metadata.version("diffrax")
+__version__ = importlib.metadata.version("diffrax_extensions")

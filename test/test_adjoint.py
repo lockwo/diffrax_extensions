@@ -414,6 +414,34 @@ def test_sde_against(diffusion_fn, getkey):
     assert tree_allclose(grads1, grads3, rtol=1e-3, atol=1e-3)
 
 
+@pytest.mark.parametrize(
+    "solver",
+    (diffrax.ShARK(), diffrax.SEA(), diffrax.SRA1(), diffrax.SlowRK()),
+)
+def test_backsolve_multiterm_solver_error(solver, getkey):
+    # https://github.com/patrick-kidger/diffrax/issues/558
+    t0, t1, dt0 = 0, 1, 0.01
+    bm = diffrax.VirtualBrownianTree(
+        t0, t1, 1e-3, (2,), key=getkey(), levy_area=diffrax.SpaceTimeLevyArea
+    )
+    drift = diffrax.ODETerm(lambda t, y, args: -y)
+    diffusion = diffrax.ControlTerm(
+        lambda t, y, args: lx.DiagonalLinearOperator(0.1 * jnp.zeros_like(y)), bm
+    )
+    terms = diffrax.MultiTerm(drift, diffusion)
+
+    @eqx.filter_jit
+    @jax.grad
+    def run(y0):
+        sol = diffrax.diffeqsolve(
+            terms, solver, t0, t1, dt0, y0, adjoint=diffrax.BacksolveAdjoint()
+        )
+        return jnp.sum(cast(Array, sol.ys))
+
+    with pytest.raises(NotImplementedError, match="not compatible with solver"):
+        run(jnp.array([1.0, 2.0]))
+
+
 def test_implicit_runge_kutta_direct_adjoint():
     diffrax.diffeqsolve(
         diffrax.ODETerm(lambda t, y, args: -y),

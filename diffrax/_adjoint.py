@@ -22,7 +22,8 @@ from ._solver import (
     AbstractSRK,
     AbstractStratonovichSolver,
 )
-from ._term import AbstractTerm, AdjointTerm
+from ._term import AbstractTerm, AdjointTerm, MultiTerm
+from ._typing import get_origin_no_specials
 
 
 ω = cast(Callable, ω)
@@ -846,6 +847,12 @@ class BacksolveAdjoint(AbstractAdjoint):
             raise NotImplementedError(
                 "`diffrax.BacksolveAdjoint` is only compatible with solvers that take "
                 "a single term."
+            )
+        if get_origin_no_specials(solver.term_structure, "term_structure") is MultiTerm:
+            raise NotImplementedError(
+                f"`diffrax.BacksolveAdjoint` is not compatible with solver "
+                f"`{type(solver).__name__}`, or any solver with requirements on "
+                "the noise. For SDEs, use a basic solver such as `diffrax.Euler`."
             )
         if event is not None:
             raise NotImplementedError(

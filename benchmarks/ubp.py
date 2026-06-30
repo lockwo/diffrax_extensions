@@ -233,24 +233,3 @@ print(f"New UBP + Precompute: {total_time / num_runs:.6f}")
 timer = Timer(stmt="_ = homemade_simu().block_until_ready()", globals=globals())
 total_time = timer.timeit(number=num_runs)
 print(f"Pure Jax: {total_time / num_runs:.6f}")
-
-"""
-Results on Mac M1 CPU:
-VBT: 0.204524
-Old UBP: 0.017464
-New UBP + Precompute: 0.002440
-Pure Jax: 0.002908
-
-Results on A100 GPU:
-VBT: 2.275057
-Old UBP: 0.112461
-New UBP + Precompute: 0.111837
-Pure Jax: 0.261937
-
-For small ndt (e.g. 100) the pure jax is faster, but the diffrax overhead
-becomes less important as the time increases.
-
-GPU being much slower isn't unsurprising and is a common trend for
-small-medium sized SDEs with VFs that are relatively cheap to evaluate
-(i.e. not neural networks).
-"""
